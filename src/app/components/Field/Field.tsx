@@ -6,7 +6,11 @@ import { letters, numbers } from './../../assets/commonData';
 import { FieldItem } from './../FieldItem/FieldItem';
 import { MarkerField } from './../FieldMarker/FieldMarker';
 
-export const Field = () => {
+interface IProps {
+    field: Array<Array<string>>
+}
+
+export const Field: React.FC<IProps> = ({ field }) => {
     const arr = Array(100).fill('').map((_, index) => index);
 
     return (
@@ -26,9 +30,11 @@ export const Field = () => {
                 </div>
 
                 <div className={s.field}>
-                    {arr.map(item => (
-                        <FieldItem key={item}/>
-                    ))}
+                    {field.map((row, rowIndex) => {
+                        return row.map((item, itemIndex)=> (
+                            <FieldItem key={rowIndex + itemIndex} value={item}/>
+                        ))
+                    })}
                 </div>
             </div>
         </div>

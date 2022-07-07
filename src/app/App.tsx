@@ -4,11 +4,14 @@ import s from './App.module.css';
 import { ButtonsBlock } from './components/ButtonsBlock/ButtonsBlock';
 import { Field } from './components/Field/Field';
 import { WelcomingPopup } from './components/WelcomingPopup/WelcomingPopup';
+import { createRandomField } from './utils/createRadomField';
 
 export const App = () => {
-    const [isWelcomingPopup, setIsWelcomingPopup] = React.useState(true);
+    const [isWelcomingPopup, setIsWelcomingPopup] = React.useState(false);
     const [userName, setUserName] = React.useState('');
 
+    const [userField, setUserField] = React.useState(createRandomField());
+    const [botField, setBotField] = React.useState(createRandomField());
 
     return (
         <div className={s.app}>
@@ -17,9 +20,9 @@ export const App = () => {
                 <WelcomingPopup setUserName={setUserName} setIsWelcomingPopup={setIsWelcomingPopup}/>
             }
             <section className={s.appContent}>
-                <Field/>
+                <Field field={userField}/>
                 <ButtonsBlock/>
-                <Field/>
+                <Field field={botField}/>
             </section>
         </div>
     );
