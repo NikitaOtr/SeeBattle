@@ -1,15 +1,19 @@
-import React, { FC, MouseEvent } from 'react';
+import React from 'react';
 import s from './ButtonApp.module.css';
 
 interface IProps {
-    children?: string,
-    onClick?: (e: MouseEvent<HTMLButtonElement>) => void,
-    disabled?: boolean,
+    children?: string
+    onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
+    disabled?: boolean
 }
 
-export const ButtonApp: FC<IProps> = ({ children, onClick, disabled }) => {
+export const ButtonApp: React.FC<IProps> = ({ children, onClick, disabled }) => {
+    const onClickButton = (e: React.MouseEvent<HTMLButtonElement>) => {
+        onClick && onClick(e);
+    };
+
     return (
-        <button disabled={disabled} className={s.button} onClick={e => onClick && onClick(e)}>
+        <button disabled={disabled} className={s.button} onClick={onClickButton}>
             {children}
         </button>
     );

@@ -1,63 +1,67 @@
-import { getRandomNumber } from './getRandomNumber';
-import { getRandomFrom } from './getRandomFrom';
+import { random } from './random';
+import { TField } from './../types/FieldTypes';
 
-const isCanPlace = (field: Array<Array<string>>, y: number, x: number) => {
-    let canPlace = true;
+const canInsertCell = (field: TField, y: number, x: number) => {
+    let isCatInsert = true;
     for(let localY = y - 1; localY <= y + 1; localY++) {
         for(let localX = x - 1; localX <= x + 1; localX++) {
-            canPlace = canPlace && field[localY][localX] === '.'
+            if (field[localY] && field[localY][localX]) {
+                isCatInsert = isCatInsert && field[localY][localX].value === '.';
+            }
         }
     }
-    return canPlace;
+    return isCatInsert;
 }
 
 export const createRandomField = () => {
-    const field = Array(12).fill('').map(item => Array(12).fill('.'));
-   
+    const field: TField = Array(10).fill('')
+        .map(() => Array(10).fill('')
+            .map(() => ({ 
+                wasShot: false,
+                value: '.',
+         })));
+    
     for (let size = 4; size >= 1; size--) {
         for (let count = 1; count <= (5 - size); count++) {
-            const direction = getRandomFrom('row', 'column');
+            const direction = random.getRandomFrom('row', 'column');
 
             if (direction === 'row') {
                 let x = 0;
                 let y = 0;
-                let canPlace = false;
-                while(!canPlace) {
-                    y = getRandomNumber(1, 10);
-                    x = getRandomNumber(1, (10 - size + 1));
-                    canPlace = true;
-                    for (let z = x; z < x + size; z++) {
-                        canPlace = canPlace && isCanPlace(field, y, z);
+                let isCanInsert = false;
+                while (!isCanInsert) {
+                    y = random.getRandomNumber(0, 9);
+                    x = random.getRandomNumber(0, (9 - size + 1));
+                    isCanInsert = true;
+
+                    for (let localX = x; localX < x + size; localX++) {
+                        isCanInsert = isCanInsert && canInsertCell(field, y, localX);
                     }
                 }
-                for (let z = x; z < x + size; z++) {
-                    field[y][z] = '#';
+
+                for (let localX = x; localX < x + size; localX++) {
+                    field[y][localX].value = '#';
                 }
             } else if (direction === 'column') {
                 let x = 0;
                 let y = 0;
-                let canPlace = false;
-                while (!canPlace) {
-                    y = getRandomNumber(1, (10 - size + 1));
-                    x = getRandomNumber(1, 10);
-                    canPlace = true;
-                    for (let z = y; z < y + size; z++) {
-                        canPlace = canPlace && isCanPlace(field, z, x);
+                let isCanInsert = false;
+                while (!isCanInsert) {
+                    y = random.getRandomNumber(0, (9 - size + 1));
+                    x = random.getRandomNumber(0, 9);
+                    isCanInsert = true;
+
+                    for (let localY = y; localY < y + size; localY++) {
+                        isCanInsert = isCanInsert && canInsertCell(field, localY, x);
                     }
                 }
-                for (let z = y; z < y + size; z++) {
-                    field[z][x] = '#';
+
+                for (let localY = y; localY < y + size; localY++) {
+                    field[localY][x].value = '#';
                 }
             }
         }
     }
-
-    field.pop();
-    field.shift();
-    field.forEach(arr => {
-        arr.pop();
-        arr.shift();
-    });
 
     return field;
 };
