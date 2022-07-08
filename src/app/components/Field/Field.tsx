@@ -3,9 +3,9 @@ import s from './Field.module.css';
 
 import { letters, numbers } from './../../assets/commonData';
 
-import { FieldCell } from '../FieldCell/FieldCell';
+import { FieldCell } from './../FieldCell/FieldCell';
 import { MarkerField } from './../FieldMarker/FieldMarker';
-import { TField } from './../../types/FieldTypes';
+import { IFinish, TField, TTurnMove } from './../../types/FieldTypes';
 import { workBeforeKillShip } from './../../utils/workBeforeKillShip';
 
 interface IProps {
@@ -14,22 +14,36 @@ interface IProps {
     isBot: boolean
     setField: React.Dispatch<React.SetStateAction<TField>>
     setTurnMove: React.Dispatch<React.SetStateAction<'player' | 'bot'>>
+    setFinish: React.Dispatch<React.SetStateAction<IFinish>>
+    setWasPlay: React.Dispatch<React.SetStateAction<boolean>>
+    turnMove: TTurnMove
+    isPlaying: boolean
 }
 
-export const Field: React.FC<IProps> = ({ field, player, isBot, setField, setTurnMove }) => {
+export const Field: React.FC<IProps> = ({ field, player, isBot, setField, setTurnMove, turnMove, 
+    isPlaying, setFinish, setWasPlay }) => {
     const shot = (field: TField, y: number, x: number) => {
-        const nextField = field.map(row => row.map(cell => ({ ...cell })));
-        if (nextField[y][x].wasShot) {
+        if (!isPlaying || field[y][x].wasShot || turnMove === 'bot') {
             return;
         }
+
+        const nextField = field.map(row => row.map(cell => ({ ...cell })));
 
         nextField[y][x].wasShot = true;
         
         if (nextField[y][x].value === '#') {
             workBeforeKillShip(nextField, y, x);
+            setFinish(prev => {
+                return {
+                    player: prev.player,
+                    bot: prev.bot - 1,
+                }
+            })
+            
         } else {
             setTurnMove('bot');
         }
+        setWasPlay(true);
         setField(nextField);
     };
 

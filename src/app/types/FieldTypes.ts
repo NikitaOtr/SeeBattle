@@ -4,3 +4,10 @@ export interface IFieldCell {
 }
 
 export type TField = Array<Array<IFieldCell>>
+
+export type TTurnMove = 'player' | 'bot'
+
+export interface IFinish {
+    player: number
+    bot: number
+}

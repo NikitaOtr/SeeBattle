@@ -3,12 +3,13 @@
     height: 40px;
     border-radius: 10px;
     background-color: inherit;
+    font-size: 16px;
     font-weight: 600;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 3px solid green;
-    color: green;
+    border: 3px solid rgb(0, 160, 56);
+    color: rgb(0, 160, 56);
     transition: color .3s, background-color .3s, transform .1s;
     cursor: pointer;
 }
@@ -19,7 +20,7 @@
 }
 
 .button:hover {
-    background-color: green;
+    background-color: rgb(0, 160, 56);
     color: black;
 }
 
