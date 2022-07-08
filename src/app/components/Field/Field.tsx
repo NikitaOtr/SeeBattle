@@ -24,6 +24,7 @@ interface IProps {
 export const Field: React.FC<IProps> = ({ player, isBot, turnMove, isPlaying, setTurnMove, setCountShips,
     setWasPlaying, field, setField }) => {
 
+    // Ход пользователя
     const shot = (field: TField, y: number, x: number) => {
         if (!isPlaying || field[y][x].wasShot || turnMove === 'bot') {
             return;
@@ -39,17 +40,19 @@ export const Field: React.FC<IProps> = ({ player, isBot, turnMove, isPlaying, se
         let isCasualties = false
         let nextMove: TTurnMove = 'bot';
         
+        // Если есть попадание то инициируется проверка на потопление коробя
+        // и в следующем ходу ходить будет пользователь
         if (nextField[y][x].value === '#') {
             markupAfterKill(nextField, y, x);
             isCasualties = true;
             nextMove = 'player';
         }
         setWasPlaying(true);
-        setField(nextField);
         setCountShips(prev => ({
             player: prev.player,
             bot: prev.bot - (isCasualties ? 1 : 0),
         }));
+        setField(nextField);
         setTurnMove(nextMove);
     };
 

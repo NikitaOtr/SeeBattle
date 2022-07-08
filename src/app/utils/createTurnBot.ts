@@ -1,6 +1,7 @@
 import { TField } from '../types/commonTypes';
 import { random } from './random';
 
+// Генерация рандомного хода Бота
 export const createTurnBot = (field: TField) => {
     let y;
     let x;

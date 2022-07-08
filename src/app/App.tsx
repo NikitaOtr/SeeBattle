@@ -17,7 +17,11 @@ export const App = () => {
     const [userName, setUserName] = React.useState('');
 
     const [isPlaying, setIsPlaying] = React.useState(false);
+
+    //Флаг если смыл продолжать предыдущую игру
     const [wasPlaying, setWasPlaying] = React.useState(false);
+
+    // Количество целых клеток у оппонентов 
     const [countShips, setCountShips] = React.useState<ICountShips>({player: 20, bot: 20});
 
     const [turnMove, setTurnMove] = React.useState<TTurnMove>('player')
@@ -32,6 +36,7 @@ export const App = () => {
     }, [countShips]);
 
     React.useEffect(() => {
+        // Ход бота
         if (turnMove === 'bot') {
             const nextField = userField.map(row => {
                 return row.map(item => {
@@ -43,7 +48,8 @@ export const App = () => {
             nextField[y][x].wasShot = true;
             let nextMove: TTurnMove = 'player';
             let isCasualties = false
-
+            // Если есть попадание то инициируется проверка на потопление коробя
+            // и в следующем ходу ходить будет бот 
             if (nextField[y][x].value === '#') {
                 markupAfterKill(nextField, y, x);
                 nextMove = 'bot';
@@ -51,6 +57,7 @@ export const App = () => {
             }
 
             setTimeout(() => {
+                // Отнимаем жизни у пользователя в случае попадания бота
                 setCountShips(prev => ({
                         bot: prev.bot,
                         player: prev.player - (isCasualties ? 1 : 0),
