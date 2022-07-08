@@ -1,10 +1,10 @@
 import React from 'react';
 import s from './FieldCell.module.css';
 
-import { IValueField } from '../../types/FieldTypes';
+import { IFieldCell } from './../../types/FieldTypes';
 
 interface IProps {
-    item: IValueField
+    item: IFieldCell
     isBot: boolean
     shot: () => void
 }

@@ -13,16 +13,22 @@ interface IProps {
     player: string
     isBot: boolean
     setField: React.Dispatch<React.SetStateAction<TField>>
+    setTurnMove: React.Dispatch<React.SetStateAction<'player' | 'bot'>>
 }
 
-export const Field: React.FC<IProps> = ({ field, player, isBot, setField }) => {
+export const Field: React.FC<IProps> = ({ field, player, isBot, setField, setTurnMove }) => {
     const shot = (field: TField, y: number, x: number) => {
-        const nextField = [...field];
+        const nextField = field.map(row => row.map(cell => ({ ...cell })));
+        if (nextField[y][x].wasShot) {
+            return;
+        }
 
         nextField[y][x].wasShot = true;
         
-        if (field[y][x].value === '#') {
+        if (nextField[y][x].value === '#') {
             workBeforeKillShip(nextField, y, x);
+        } else {
+            setTurnMove('bot');
         }
         setField(nextField);
     };
