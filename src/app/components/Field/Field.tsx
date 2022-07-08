@@ -5,9 +5,8 @@ import { FieldCell } from './../FieldCell/FieldCell';
 import { MarkerField } from './../FieldMarker/FieldMarker';
 
 import { ICountShips, TField, TTurnMove } from '../../types/commonTypes';
-import { workBeforeKillShip } from './../../utils/workBeforeKillShip';
+import { markupAfterKill } from '../../utils/markupAfterKill';
 import { letters, numbers } from './../../assets/commonData';
-
 
 interface IProps {
     player: string
@@ -30,24 +29,28 @@ export const Field: React.FC<IProps> = ({ player, isBot, turnMove, isPlaying, se
             return;
         }
 
-        const nextField = field.map(row => row.map(cell => ({ ...cell })));
+        const nextField = field.map(row => {
+            return row.map(item => {
+                return {...item};
+            });
+        });
 
         nextField[y][x].wasShot = true;
+        let isCasualties = false
+        let nextMove: TTurnMove = 'bot';
         
         if (nextField[y][x].value === '#') {
-            workBeforeKillShip(nextField, y, x);
-            setCountShips(prev => {
-                return {
-                    player: prev.player,
-                    bot: prev.bot - 1,
-                }
-            })
-            
-        } else {
-            setTurnMove('bot');
+            markupAfterKill(nextField, y, x);
+            isCasualties = true;
+            nextMove = 'player';
         }
         setWasPlaying(true);
         setField(nextField);
+        setCountShips(prev => ({
+            player: prev.player,
+            bot: prev.bot - (isCasualties ? 1 : 0),
+        }));
+        setTurnMove(nextMove);
     };
 
     return (

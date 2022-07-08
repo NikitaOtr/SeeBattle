@@ -8,7 +8,8 @@ import { GameInformation } from './components/GameInformation/GameInformation';
 
 import { ICountShips, TField, TTurnMove } from './types/commonTypes';
 import { createRandomField } from './utils/createRadomField';
-import { turnBot } from './utils/turnBot';
+import { createTurnBot } from './utils/createTurnBot';
+import { markupAfterKill } from './utils/markupAfterKill';
 
 export const App = () => {
     const [isWelcomingPopup, setIsWelcomingPopup] = React.useState(true);
@@ -32,17 +33,30 @@ export const App = () => {
 
     React.useEffect(() => {
         if (turnMove === 'bot') {
-            const nextField = userField.map(row => row.map(cell => ({ ...cell })));
-            const test = turnBot(nextField);
-            setTimeout(() => {
-                setCountShips(prev => {
-                    return {
-                        bot: prev.bot,
-                        player: prev.player - (test.turnMove === 'bot' ? 1 : 0),
-                    }
+            const nextField = userField.map(row => {
+                return row.map(item => {
+                    return {...item};
                 });
-                setUserField(test.field);
-                setTurnMove(test.turnMove as 'bot');
+            });
+            
+            const [y, x] = createTurnBot(nextField);
+            nextField[y][x].wasShot = true;
+            let nextMove: TTurnMove = 'player';
+            let isCasualties = false
+
+            if (nextField[y][x].value === '#') {
+                markupAfterKill(nextField, y, x);
+                nextMove = 'bot';
+                isCasualties= true;
+            }
+
+            setTimeout(() => {
+                setCountShips(prev => ({
+                        bot: prev.bot,
+                        player: prev.player - (isCasualties ? 1 : 0),
+                }));
+                setUserField(nextField);
+                setTurnMove(nextMove);
             }, 500)
         }
     }, [turnMove, userField])
@@ -60,7 +74,7 @@ export const App = () => {
                     setWasPlaying={setWasPlaying}/> 
                 <div className={s.info}>
                     <GameInformation isPlaying={isPlaying} turnMove={turnMove} userName={userName} 
-                        countShips={countShips}/>
+                        countShips={countShips} wasPlaying={wasPlaying}/>
                     <ButtonsBlock setIsWelcomingPopup={setIsWelcomingPopup} setUserField={setUserField}
                         setBotField={setBotField} setIsPlaying={setIsPlaying} isPlaying={isPlaying}
                         wasPlaying={wasPlaying} setWasPlaying={setWasPlaying} setCountShips={setCountShips} 

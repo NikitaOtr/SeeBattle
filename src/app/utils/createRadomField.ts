@@ -1,12 +1,12 @@
 import { random } from './random';
 import { TField } from '../types/commonTypes';
 
-const canInsertCell = (field: TField, y: number, x: number) => {
+const getIsInsertCell = (field: TField, y: number, x: number) => {
     let isCatInsert = true;
     for(let localY = y - 1; localY <= y + 1; localY++) {
         for(let localX = x - 1; localX <= x + 1; localX++) {
             if (field[localY] && field[localY][localX]) {
-                isCatInsert = isCatInsert && field[localY][localX].value === '.';
+                isCatInsert = isCatInsert && field[localY][localX]?.value === '.';
             }
         }
     }
@@ -14,12 +14,12 @@ const canInsertCell = (field: TField, y: number, x: number) => {
 }
 
 export const createRandomField = () => {
-    const field: TField = Array(10).fill('')
-        .map(() => Array(10).fill('')
-            .map(() => ({ 
-                wasShot: false,
-                value: '.',
-         })));
+    const field: TField = Array(10).fill('').map(() => {
+        return Array(10).fill('').map(() => ({
+            wasShot: false,
+            value: '.',
+        }));
+    });
     
     for (let size = 4; size >= 1; size--) {
         for (let count = 1; count <= (5 - size); count++) {
@@ -35,7 +35,7 @@ export const createRandomField = () => {
                     isCanInsert = true;
 
                     for (let localX = x; localX < x + size; localX++) {
-                        isCanInsert = isCanInsert && canInsertCell(field, y, localX);
+                        isCanInsert = isCanInsert && getIsInsertCell(field, y, localX);
                     }
                 }
 
@@ -52,7 +52,7 @@ export const createRandomField = () => {
                     isCanInsert = true;
 
                     for (let localY = y; localY < y + size; localY++) {
-                        isCanInsert = isCanInsert && canInsertCell(field, localY, x);
+                        isCanInsert = isCanInsert && getIsInsertCell(field, localY, x);
                     }
                 }
 

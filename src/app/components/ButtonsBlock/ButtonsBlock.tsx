@@ -49,10 +49,18 @@ export const ButtonsBlock: React.FC<IProps> = ({ userName, setIsWelcomingPopup, 
         setIsWelcomingPopup(true);
     };
 
+    const isDisableButtonPause = () => {
+        if (isPlaying) {
+            return false;
+        } else {
+            return !wasPlaying || countShips.bot === 0 || countShips.player === 0;
+        }
+    };
+
     return (
         <div className={s.buttonsBlock}>
             <ButtonApp disabled={!userName || isPlaying} onClick={onClickNewGame}>Начать новую игру</ButtonApp>
-            <ButtonApp disabled={!isPlaying || countShips.bot === 0 || countShips.player === 0} onClick={onClickPlus}>
+            <ButtonApp disabled={isDisableButtonPause()} onClick={onClickPlus}>
                 {isPlaying ? 'Остановить игру' : 'Продолжить игру'}
             </ButtonApp>
             <ButtonApp disabled={isPlaying} onClick={onClickChangeField}>Изменить расстановку</ButtonApp>
