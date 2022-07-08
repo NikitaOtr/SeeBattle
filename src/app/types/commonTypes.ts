@@ -7,7 +7,7 @@ export type TField = Array<Array<IFieldCell>>
 
 export type TTurnMove = 'player' | 'bot'
 
-export interface IFinish {
+export interface ICountShips {
     player: number
     bot: number
 }

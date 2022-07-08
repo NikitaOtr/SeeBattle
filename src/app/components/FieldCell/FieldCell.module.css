@@ -33,7 +33,7 @@
    
 }
 
-.closeModal {
+.hit {
     position: relative;
 	width: 24px;
 	height: 24px;
@@ -42,8 +42,8 @@
     transition: opacity ease 0.5s;
 }
 
-.closeModal::before,
-.closeModal::after {
+.hit::before,
+.hit::after {
 	content: '';
     position: absolute;
 	top: 10px;
@@ -53,11 +53,11 @@
 	background: red;
 }
 
-.closeModal::before {
+.hit::before {
 	transform: rotate(45deg);
 }
 
-.closeModal::after {
+.hit::after {
 	transform: rotate(-45deg);
 }
 

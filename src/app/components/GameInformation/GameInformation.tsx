@@ -1,33 +1,30 @@
 import React from 'react'
-import { IFinish, TTurnMove } from './../../types/FieldTypes';
+import { ICountShips, TTurnMove } from './../../types/commonTypes';
 import s from './GameInformation.module.css';
 
 interface IProps {
     isPlaying: boolean
     turnMove: TTurnMove
     userName: string
-    finish: IFinish
+    countShips: ICountShips
 }
 
-export const GameInformation: React.FC<IProps> = ({ isPlaying, turnMove, userName, finish }) => {
-    const generationInformation = () => {
+export const GameInformation: React.FC<IProps> = ({ isPlaying, turnMove, userName, countShips }) => {
+    const createInformation = () => {
         if (!userName) {
             return 'Если вы хотите сыграть не обходимо ввести имя. Нажмите "Изменить имя"';
-        }
-        if (finish.bot === 0) {
+        } else if (countShips.bot === 0) {
             return 'Вы победили!!! Если хотите сыграть ещё раз нажмите "Начать новую играть"';
-        }
-        if (finish.player === 0) {
+        } else if (countShips.player === 0) {
             return 'Победил Бот.Вы можете взять реванш для этого нажмите "Начать новую играть"';
-        }
-        if (isPlaying) {
-            return `Сейчас ходит ${turnMove === 'bot' ? 'Бот' : userName}`;
+        } else if (isPlaying) {
+            return `Сейчас делает ход: ${turnMove === 'bot' ? 'Бот' : userName}`;
         } else {
             return 'Для начала игры нажмите "Начать новую играть"';
         }
     };
 
     return (
-        <div className={s.information}>{generationInformation()}</div>
+        <div className={s.information}>{createInformation()}</div>
     );
 };

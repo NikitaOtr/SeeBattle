@@ -1,7 +1,7 @@
 import React from 'react';
 import s from './FieldCell.module.css';
 
-import { IFieldCell } from './../../types/FieldTypes';
+import { IFieldCell } from '../../types/commonTypes';
 
 interface IProps {
     item: IFieldCell
@@ -14,7 +14,7 @@ export const FieldCell: React.FC<IProps> = ({ item, isBot, shot }) => {
         <div onClick={() => isBot && shot()} 
              className={`${s.fieldItem} ${isBot ? s.fieldItemBot : ''} 
                          ${!isBot && item.value === '#' ? s.ship : s.notShip}`}> 
-            {item.wasShot && <div className={`${item.value === '#' ? s.closeModal : s.miss}`}></div>}               
+            {item.wasShot && <div className={`${item.value === '#' ? s.hit : s.miss}`}></div>}               
         </div>
     );
 };

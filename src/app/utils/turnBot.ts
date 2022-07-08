@@ -1,4 +1,4 @@
-import { TField } from './../types/FieldTypes';
+import { TField } from '../types/commonTypes';
 import { random } from './random';
 import { workBeforeKillShip } from './workBeforeKillShip';
 

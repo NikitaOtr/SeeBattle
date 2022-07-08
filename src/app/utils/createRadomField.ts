@@ -1,5 +1,5 @@
 import { random } from './random';
-import { TField } from './../types/FieldTypes';
+import { TField } from '../types/commonTypes';
 
 const canInsertCell = (field: TField, y: number, x: number) => {
     let isCatInsert = true;

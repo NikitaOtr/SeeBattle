@@ -1,4 +1,4 @@
-import { TField } from './../types/FieldTypes';
+import { TField } from '../types/commonTypes';
 
 const hasArray = (arr: Array<Array<number>>, item: Array<number>) => {
     return arr.some(([y, x]) => y === item[0] && x === item[1]);

@@ -1,27 +1,30 @@
 import React from 'react';
 import s from './Field.module.css';
 
-import { letters, numbers } from './../../assets/commonData';
-
 import { FieldCell } from './../FieldCell/FieldCell';
 import { MarkerField } from './../FieldMarker/FieldMarker';
-import { IFinish, TField, TTurnMove } from './../../types/FieldTypes';
+
+import { ICountShips, TField, TTurnMove } from '../../types/commonTypes';
 import { workBeforeKillShip } from './../../utils/workBeforeKillShip';
+import { letters, numbers } from './../../assets/commonData';
+
 
 interface IProps {
-    field: TField
     player: string
     isBot: boolean
-    setField: React.Dispatch<React.SetStateAction<TField>>
-    setTurnMove: React.Dispatch<React.SetStateAction<'player' | 'bot'>>
-    setFinish: React.Dispatch<React.SetStateAction<IFinish>>
-    setWasPlay: React.Dispatch<React.SetStateAction<boolean>>
     turnMove: TTurnMove
     isPlaying: boolean
+    setTurnMove: React.Dispatch<React.SetStateAction<TTurnMove>>
+    setCountShips: React.Dispatch<React.SetStateAction<ICountShips>>
+    setWasPlaying: React.Dispatch<React.SetStateAction<boolean>>
+   
+    field: TField
+    setField: React.Dispatch<React.SetStateAction<TField>>
 }
 
-export const Field: React.FC<IProps> = ({ field, player, isBot, setField, setTurnMove, turnMove, 
-    isPlaying, setFinish, setWasPlay }) => {
+export const Field: React.FC<IProps> = ({ player, isBot, turnMove, isPlaying, setTurnMove, setCountShips,
+    setWasPlaying, field, setField }) => {
+
     const shot = (field: TField, y: number, x: number) => {
         if (!isPlaying || field[y][x].wasShot || turnMove === 'bot') {
             return;
@@ -33,7 +36,7 @@ export const Field: React.FC<IProps> = ({ field, player, isBot, setField, setTur
         
         if (nextField[y][x].value === '#') {
             workBeforeKillShip(nextField, y, x);
-            setFinish(prev => {
+            setCountShips(prev => {
                 return {
                     player: prev.player,
                     bot: prev.bot - 1,
@@ -43,7 +46,7 @@ export const Field: React.FC<IProps> = ({ field, player, isBot, setField, setTur
         } else {
             setTurnMove('bot');
         }
-        setWasPlay(true);
+        setWasPlaying(true);
         setField(nextField);
     };
 

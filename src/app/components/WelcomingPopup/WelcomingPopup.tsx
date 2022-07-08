@@ -10,9 +10,14 @@ interface IProps {
     setIsWelcomingPopup: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const WelcomingPopup: React.FC<IProps> = ({ setUserName, setIsWelcomingPopup, userName}) => {
+export const WelcomingPopup: React.FC<IProps> = ({ userName, setUserName, setIsWelcomingPopup }) => {
     const [valueInput, setValueInput] = React.useState(userName);
     const [isError, setIsError] = React.useState(false);
+    const refInput = React.useRef<HTMLInputElement>(null);
+
+    React.useEffect(() => {
+        refInput.current && refInput.current.focus();
+    }, []);
 
     const onClickWrapper = () => {
         setIsWelcomingPopup(false)
@@ -57,7 +62,7 @@ export const WelcomingPopup: React.FC<IProps> = ({ setUserName, setIsWelcomingPo
                 <form className={s.form} onSubmit={onSubmitForm} >
                     <label>
                         <p className={s.labelText}>Для продолжения необходимо ввести имя</p>  
-                        <input className={`${s.input} ${isError ? s.inputError : ''}`} value={valueInput}
+                        <input ref={refInput} className={`${s.input} ${isError ? s.inputError : ''}`} value={valueInput}
                             onChange={onChangeInput} onBlur={onBlurInput}/>
                         <div className={isError ? s.active : s.inActive}>
                             <p className={s.error}>Имя должно начинаться большой буквы</p>
